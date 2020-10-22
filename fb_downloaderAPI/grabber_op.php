@@ -7,7 +7,7 @@ function url_get_contents($url)
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.47 Safari/537.36');
+    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.47 Safari/537.36');    
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
     $data = curl_exec($ch);
     curl_close($ch);
@@ -52,4 +52,24 @@ function getTitle($curl_content)
         $title = $matches[1];
     }
     return cleanStr($title);
+}
+
+function convertUrl($url)
+{
+    $url = str_replace("\\", "", $url);
+    $url = str_replace("&amp", "&", $url);
+    $url = str_replace("&;", "&", $url);
+    $url = "https:" . $url;
+    return $url;
+}
+
+function mobilLink($curl_content)
+{
+    $regex = '@&quot;https:(.*?)&quot;,&quot;@si';
+    if (preg_match_all($regex, $curl_content, $match)) {
+        return $match[1][0];
+    } else {
+        return;
+    }
+
 }
