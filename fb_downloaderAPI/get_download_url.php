@@ -5,6 +5,15 @@
     if (!empty($_POST['url'])) {
         //get data for URL
         $data = url_get_contents($_POST['url']);
+        if(parse_url($_POST["url"])["host"] === "m.facebook.com") {
+            $link = convertUrl(mobilLink($data));
+            if($link != "") {
+                $title = getTitle($data);
+                $results = array('title'=>$title, 'sd_url'=>$link);
+                echo json_encode(array("RESULT"=>array($results)));
+                die();
+            }
+        }
 
         //get the video links and title
         $hdlink = hdLink($data);
